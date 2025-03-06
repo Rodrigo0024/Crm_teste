@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Adicionar Cliente</h1>
+<form method="POST">
+    <div class="form-group">
+        <label>Nome</label>
+        <input type="text" name="name" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label>Telefone</label>
+        <input type="text" name="phone" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label>Endereço</label>
+        <textarea name="address" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Informações Adicionais</label>
+        <textarea name="adicionais" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Salvar</button>
+</form>
+{% endblock %}

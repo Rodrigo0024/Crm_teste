@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Mensagens{% endblock %}
+
+{% block content %}
+<h1>Mensagens</h1>
+
+<!-- Formulário para adicionar nova mensagem -->
+<div class="mb-4">
+    <h3>Enviar Nova Mensagem</h3>
+    <form method="POST" action="{{ url_for('add_message') }}">
+        <div class="mb-3">
+            <label for="content" class="form-label">Mensagem</label>
+            <textarea class="form-control" id="content" name="content" rows="3" placeholder="Digite sua mensagem aqui..." required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="project_id" class="form-label">Projeto</label>
+            <select class="form-select" id="project_id" name="project_id" required>
+                <option value="">Selecione um projeto</option>
+                {% for project in projects %}
+                <option value="{{ project[0] }}">{{ project[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Enviar</button>
+    </form>
+</div>
+
+<!-- Lista de Mensagens -->
+<h3>Lista de Mensagens</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Projeto</th>
+            <th>Mensagem</th>
+            <th>Data/Hora</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in messages %}
+        <tr>
+            <td>{{ message[0] }}</td>
+            <td>{{ message[1] }}</td>
+            <td>{{ message[2] }}</td>
+            <td>{{ message[3] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

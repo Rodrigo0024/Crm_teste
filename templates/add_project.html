@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Adicionar Projeto{% endblock %}
+
+{% block content %}
+<h1>Adicionar Projeto</h1>
+<form method="POST">
+    <div class="mb-3">
+        <label for="title" class="form-label">Título</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Ex: Desenvolvimento do CRM" required>
+    </div>
+    <div class="mb-3">
+        <label for="start_date" class="form-label">Data de Início</label>
+        <input type="date" class="form-control" id="start_date" name="start_date" required>
+    </div>
+    <div class="mb-3">
+        <label for="end_date" class="form-label">Data de Término</label>
+        <input type="date" class="form-control" id="end_date" name="end_date" required>
+    </div>
+    <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select class="form-select" id="status" name="status" required>
+            <option value="pending">Pendente</option>
+            <option value="in_progress">Em Andamento</option>
+            <option value="completed">Concluído</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success">Salvar</button>
+</form>
+{% endblock %}

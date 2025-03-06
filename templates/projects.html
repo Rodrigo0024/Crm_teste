@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciamento de Projetos{% endblock %}
+
+{% block content %}
+<h1>Gerenciamento de Projetos</h1>
+<a href="{{ url_for('add_project') }}" class="btn btn-primary mb-3">Adicionar Projeto</a>
+
+<!-- Tabela de Projetos -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Data de Início</th>
+            <th>Data de Término</th>
+            <th>Status</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in projects %}
+        <tr>
+            <td>{{ project[0] }}</td>
+            <td>{{ project[1] }}</td>
+            <td>{{ project[3] }}</td>
+            <td>{{ project[4] }}</td>
+            <td>{{ project[5] }}</td>
+            
+            <td>
+                <a href="{{ url_for('edit_project', id=project[0]) }}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="{{ url_for('delete_project', id=project[0]) }}" class="btn btn-danger btn-sm">Excluir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
