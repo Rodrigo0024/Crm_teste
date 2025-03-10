@@ -73,7 +73,7 @@ def edit_client(id):
         return redirect(url_for('index'))
 
     cur.execute("SELECT * FROM clients WHERE id=%s", (id,))
-    client = cur.fetchone()## O método `.fetchone()` retorna uma única tupla contendo os valores da linh
+    client = cur.fetchone()# O método `.fetchone()` retorna uma única tupla contendo os valores da linh
     cur.close()
     return render_template('edit_client.html', client=client)
 
@@ -158,15 +158,20 @@ def add_project():
 def edit_pipeline(id):
     cur = mysql.connection.cursor()
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        phone = request.form['phone']
-        address = request.form['address']
-        informacoes = request.form['adicionais']
+        client_id = request.form.get('client_id', '')
+        stage = request.form.get('stage', '')
+        value = request.form.get('value', 0.0)
+        probability = request.form.get('probability', 0)
 
+        # Validação básica (opcional)
+        if not client_id or not stage or not value or not probability:
+            flash('Por favor, preencha todos os campos.', 'danger')
+            return redirect(url_for('edit_pipeline', id=id))
+
+        # Atualize os dados do pipeline
         cur.execute(
             "UPDATE sales_pipeline SET client_id=%s, stage=%s, value=%s, probability=%s WHERE id=%s",
-            (name, email, phone, address, informacoes, id)
+            (client_id, stage, value, probability, id)
         )
         mysql.connection.commit()
         cur.close()
@@ -174,9 +179,14 @@ def edit_pipeline(id):
         flash('Item do pipeline atualizado com sucesso!', 'success')
         return redirect(url_for('pipeline'))
 
-    cur.execute("SELECT * FROM sales_pipeline WHERE id=%s", (id,))
+    # Recupera o item do pipeline para edição
+    cur.execute("""
+        SELECT sp.id, c.name, sp.stage, sp.value, sp.probability
+        FROM sales_pipeline sp
+        JOIN clients c ON sp.client_id = c.id
+        WHERE sp.id = %s
+    """, (id,))
     pipeline_item = cur.fetchone()
-    cur.close()
 
     # Recupera a lista de clientes para preencher o menu suspenso
     cur.execute("SELECT id, name FROM clients")
@@ -195,6 +205,12 @@ def projects():
 @app.route('/delete_project/<int:id>', methods=['POST'])
 def delete_project(id):
     cur = mysql.connection.cursor()
+
+    # Remove todos os registros na tabela messages associados ao projeto
+    cur.execute("DELETE FROM messages WHERE project_id=%s", (id,))
+    mysql.connection.commit()
+
+    # Agora, pode excluir o projeto
     cur.execute("DELETE FROM projects WHERE id=%s", (id,))
     mysql.connection.commit()
     cur.close()
